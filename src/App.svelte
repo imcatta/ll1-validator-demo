@@ -43,7 +43,7 @@
 </style>
 
 <div class="container">
-  <h1 class="title is-2">LL(1) validator</h1>
+  <h1 class="title is-2">LL(1) Validator</h1>
   <div class="columns">
     <div class="column is-one-third">
       <div class="box">
