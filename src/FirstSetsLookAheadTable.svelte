@@ -5,15 +5,17 @@
   export let lookAheads = {};
 
   let iterations;
-  const nonTerminal = Object.keys(grammar)[0];
-  if (nonTerminal) {
-    iterations = Array.from(firstSets[nonTerminal][0].keys());
-  } else {
-    iterations = [];
-  }
-
   let dependencyCells = [];
   let selectedCell;
+
+  $: {
+    const nonTerminal = Object.keys(grammar)[0];
+    if (nonTerminal) {
+      iterations = Array.from(firstSets[nonTerminal][0].keys());
+    } else {
+      iterations = [];
+    }
+  }
 
   function onCellClick(l, index, iteration) {
     const newSelection = `${l}_${index}_${iteration}`;
@@ -46,7 +48,7 @@
     {#each iterations as iteration}
       <th>{iteration}</th>
     {/each}
-    <th class="separator">
+    <th class="separator" />
     <th>Look aheads</th>
   </tr>
   {#each Object.keys(grammar) as l}
@@ -64,7 +66,7 @@
             {#if set.length}{`{${set}}`}{:else}∅{/if}
           </td>
         {/each}
-        <td class="separator">
+        <td class="separator" />
         <td>{`{${lookAheads[l][index]}}`}</td>
       </tr>
     {/each}

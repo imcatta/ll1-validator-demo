@@ -3,15 +3,17 @@
   export let dependencies = {};
 
   let iterations;
-  const nonTerminal = Object.keys(followSets)[0];
-  if (nonTerminal) {
-    iterations = Array.from(followSets[nonTerminal].keys());
-  } else {
-    iterations = [];
-  }
-
   let dependencyCells = [];
   let selectedCell;
+
+  $: {
+    const nonTerminal = Object.keys(followSets)[0];
+    if (nonTerminal) {
+      iterations = Array.from(followSets[nonTerminal].keys());
+    } else {
+      iterations = [];
+    }
+  }
 
   function onCellClick(l, iteration) {
     const newSelection = `${l}_${iteration}`;
