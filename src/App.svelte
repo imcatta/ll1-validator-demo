@@ -4,7 +4,15 @@
   import { parser, ll1 } from "ll1-validator";
 
   let grammarString =
-    "S -> A;\nA -> A a;\nA -> A b a;\nA -> Z;\nA -> ;\nZ -> Z x;\nZ -> Z y x;\nZ -> S;";
+    "/* this is the grammar used\n" +
+    "to parse the user input */\n\n" +
+    "S -> RULE S;\n" +
+    "S -> ;\n" +
+    "RULE -> L assign R semicolon;\n" +
+    "L -> nt;\n" +
+    "R -> nt R;\n" +
+    "R -> t R;\n" +
+    "R -> ; // you can also use inline comments\n";
   let grammar;
   let firstSets;
   let followSets;
@@ -27,7 +35,6 @@
   :global(html) {
     background-color: #efefef !important;
   }
-
   :global(.selected) {
     background-color: #dedede;
   }
@@ -40,8 +47,13 @@
   .container {
     padding-top: 5px;
   }
-  .column, .box {
+  .column,
+  .box {
     overflow-x: auto;
+  }
+  .title {
+    margin-top: 4px;
+    margin-left: 8px;
   }
 </style>
 
