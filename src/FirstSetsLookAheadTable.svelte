@@ -32,8 +32,6 @@
       });
     }
   }
-
-  console.log(lookAheads);
 </script>
 
 <style>
