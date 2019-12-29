@@ -40,6 +40,9 @@
   .container {
     padding-top: 5px;
   }
+  .column, .box {
+    overflow-x: auto;
+  }
 </style>
 
 <div class="container">
