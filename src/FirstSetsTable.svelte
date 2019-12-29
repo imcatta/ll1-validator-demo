@@ -18,12 +18,13 @@
     selectedCell = `${l}_${index}_${iteration}`;
     dependencyCells = [];
 
+    console.log(dependencies[l][index]);
+
     if (iteration >= 1) {
       dependencies[l][index].forEach(v => {
-        for (let i = 0; i < dependencies[l].length; i++) {
-          dependencyCells.push(`${l}_${i}_${iteration - 1}`);
-        }
+        dependencyCells.push(`${v}_${iteration - 1}`);
       });
+      console.log(dependencyCells)
     }
   }
 </script>
@@ -55,7 +56,7 @@
           <td
             on:click={onCellClick(l, index, iteration)}
             class:selected={selectedCell === `${l}_${index}_${iteration}`}
-            class:dependency={dependencyCells.includes(`${l}_${index}_${iteration}`)}>
+            class:dependency={dependencyCells.includes(`${l}_${iteration}`)}>
             {#if set.length}{`{${set}}`}{:else}∅{/if}
           </td>
         {/each}
