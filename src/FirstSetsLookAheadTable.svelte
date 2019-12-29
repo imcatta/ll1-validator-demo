@@ -2,6 +2,7 @@
   export let firstSets = {};
   export let dependencies = {};
   export let grammar = {};
+  export let lookAheads = {};
 
   let iterations;
   const nonTerminal = Object.keys(grammar)[0];
@@ -31,7 +32,15 @@
       });
     }
   }
+
+  console.log(lookAheads);
 </script>
+
+<style>
+  .separator {
+    background-color: rgb(255, 240, 165);
+  }
+</style>
 
 <table class="table is-bordered">
   <tr>
@@ -39,6 +48,8 @@
     {#each iterations as iteration}
       <th>{iteration}</th>
     {/each}
+    <th class="separator">
+    <th>Look aheads</th>
   </tr>
   {#each Object.keys(grammar) as l}
     {#each grammar[l] as rule, index}
@@ -55,6 +66,8 @@
             {#if set.length}{`{${set}}`}{:else}∅{/if}
           </td>
         {/each}
+        <td class="separator">
+        <td>{`{${lookAheads[l][index]}}`}</td>
       </tr>
     {/each}
   {/each}

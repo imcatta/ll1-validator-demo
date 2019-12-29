@@ -1,5 +1,5 @@
 <script>
-  import FirstSetsTable from "./FirstSetsTable.svelte";
+  import FirstSetsLookAheadTable from "./FirstSetsLookAheadTable.svelte";
   import FollowSetsTable from "./FollowSetsTable.svelte";
   import { parser, ll1 } from "ll1-validator";
 
@@ -10,6 +10,7 @@
   let followSets;
   let firstSetsDependencies;
   let followSetsDependencies;
+  let lookAheads;
 
   function calculate() {
     grammar = parser.parseString(grammarString);
@@ -17,6 +18,7 @@
     followSets = ll1.calculateFollowSets(grammar);
     firstSetsDependencies = ll1.calculateFirstSetsDependencies(grammar);
     followSetsDependencies = ll1.calculateFollowSetDipendencies(grammar);
+    lookAheads = ll1.calculateLookAheads(grammar);
   }
   calculate();
 </script>
@@ -54,10 +56,11 @@
     <div class="column">
       <div class="box">
         {#if grammar}
-          <FirstSetsTable
+          <FirstSetsLookAheadTable
             {grammar}
             {firstSets}
-            dependencies={firstSetsDependencies} />
+            dependencies={firstSetsDependencies}
+            {lookAheads} />
           <FollowSetsTable {followSets} dependencies={followSetsDependencies} />
         {/if}
       </div>
