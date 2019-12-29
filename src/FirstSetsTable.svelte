@@ -18,13 +18,10 @@
     selectedCell = `${l}_${index}_${iteration}`;
     dependencyCells = [];
 
-    console.log(dependencies[l][index]);
-
     if (iteration >= 1) {
       dependencies[l][index].forEach(v => {
         dependencyCells.push(`${v}_${iteration - 1}`);
       });
-      console.log(dependencyCells)
     }
   }
 </script>
