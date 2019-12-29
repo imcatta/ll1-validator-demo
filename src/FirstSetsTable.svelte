@@ -1,36 +1,47 @@
 <script>
-  export let firstSets;
-  export let dependencies;
-  export let grammar;
+  export let firstSets = {};
+  export let dependencies = {};
+  export let grammar = {};
 
-  let activeCells = [];
+  let iterations;
+  const nonTerminal = Object.keys(grammar)[0];
+  if (nonTerminal) {
+    iterations = Array.from(firstSets[nonTerminal][0].keys());
+  } else {
+    iterations = [];
+  }
+
+  let dependencyCells = [];
+  let selectedCell;
 
   function onCellClick(l, index, iteration) {
-    // TODO refactor
-    activeCells = [];
-    activeCells.push(`${l}_${index}_${iteration}`);
-    if (iteration === 0) {
-      return;
+    selectedCell = `${l}_${index}_${iteration}`;
+    dependencyCells = [];
+
+    if (iteration >= 1) {
+      dependencies[l][index].forEach(v => {
+        for (let i = 0; i < dependencies[l].length; i++) {
+          dependencyCells.push(`${l}_${i}_${iteration - 1}`);
+        }
+      });
     }
-    dependencies[l][index].forEach(v => {
-      for (let i = 0; i < dependencies[l].length; i++) {
-        activeCells.push(`${l}_${i}_${iteration-1}`);        
-      }
-    });
   }
 </script>
 
 <style>
   .selected {
-    background-color: #cdcdcd;
+    background-color: #dedede;
+  }
+  .dependency {
+    background-color: #d2eaff;
   }
 </style>
 
 <table class="table is-bordered">
   <tr>
     <th>Rule</th>
-    {#each firstSets['S'][0] as rule, index}
-      <th>{index}</th>
+    {#each iterations as iteration}
+      <th>{iteration}</th>
     {/each}
   </tr>
   {#each Object.keys(grammar) as l}
@@ -43,7 +54,8 @@
         {#each firstSets[l][index] as set, iteration}
           <td
             on:click={onCellClick(l, index, iteration)}
-            class:selected={activeCells.includes(`${l}_${index}_${iteration}`)}>
+            class:selected={selectedCell === `${l}_${index}_${iteration}`}
+            class:dependency={dependencyCells.includes(`${l}_${index}_${iteration}`)}>
             {#if set.length}{`{${set}}`}{:else}∅{/if}
           </td>
         {/each}
