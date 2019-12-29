@@ -4,10 +4,14 @@
   import { parser, ll1 } from "ll1-validator";
 
   let grammarString =
-    "/* this is the grammar used\n" +
-    "to parse the user input */\n\n" +
-    "S -> RULE S;\n" +
-    "S -> ;\n" +
+    "/* this is the grammar \n" +
+    "used to parse the input */\n" +
+    "_start_symbol S; // optional, 'S' by default\n\n" +
+    "S -> SS RULE RULELIST;\n" +
+    "SS -> ssk nt semicolon;\n" +
+    "SS -> ;\n" +
+    "RULELIST -> RULE RULELIST;\n" +
+    "RULELIST -> ;\n" +
     "RULE -> L assign R semicolon;\n" +
     "L -> nt;\n" +
     "R -> nt R;\n" +
@@ -22,6 +26,7 @@
 
   function calculate() {
     grammar = parser.parseString(grammarString);
+    delete grammar._start_symbol;
     firstSets = ll1.calculateFirstSets(grammar);
     followSets = ll1.calculateFollowSets(grammar);
     firstSetsDependencies = ll1.calculateFirstSetsDependencies(grammar);
