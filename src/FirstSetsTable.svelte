@@ -15,7 +15,14 @@
   let selectedCell;
 
   function onCellClick(l, index, iteration) {
-    selectedCell = `${l}_${index}_${iteration}`;
+    const newSelection = `${l}_${index}_${iteration}`;
+    if (selectedCell === newSelection) {
+      selectedCell = undefined;
+      dependencyCells = [];
+      return;
+    }
+
+    selectedCell = newSelection;
     dependencyCells = [];
 
     if (iteration >= 1) {
@@ -25,15 +32,6 @@
     }
   }
 </script>
-
-<style>
-  .selected {
-    background-color: #dedede;
-  }
-  .dependency {
-    background-color: #d2eaff;
-  }
-</style>
 
 <table class="table is-bordered">
   <tr>

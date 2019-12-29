@@ -1,23 +1,36 @@
 <script>
   import FirstSetsTable from "./FirstSetsTable.svelte";
+  import FollowSetsTable from "./FollowSetsTable.svelte";
   import { parser, ll1 } from "ll1-validator";
 
-  let grammarString = "S -> A;\nA -> A a;\nA -> A b a;\nA -> Z;\nA -> ;\nZ -> Z x;\nZ -> Z x y;\nZ -> S;";
+  let grammarString =
+    "S -> A;\nA -> A a;\nA -> A b a;\nA -> Z;\nA -> ;\nZ -> Z x;\nZ -> Z y x;\nZ -> S;";
   let grammar;
   let firstSets;
-  let dependencies;
+  let followSets;
+  let firstSetsDependencies;
+  let followSetsDependencies;
 
   function calculate() {
     grammar = parser.parseString(grammarString);
     firstSets = ll1.calculateFirstSets(grammar);
-    dependencies = ll1.calculateFirstSetsDependencies(grammar);
+    followSets = ll1.calculateFollowSets(grammar);
+    firstSetsDependencies = ll1.calculateFirstSetsDependencies(grammar);
+    followSetsDependencies = ll1.calculateFollowSetDipendencies(grammar);
   }
   calculate();
 </script>
 
 <style>
-  :global(body) {
-    background-color: #efefef;
+  :global(html) {
+    background-color: #efefef !important;
+  }
+
+  :global(.selected) {
+    background-color: #dedede;
+  }
+  :global(.dependency) {
+    background-color: #d2eaff;
   }
   .textarea {
     margin-bottom: 5px;
@@ -41,7 +54,11 @@
     <div class="column">
       <div class="box">
         {#if grammar}
-          <FirstSetsTable {grammar} {firstSets} {dependencies} />
+          <FirstSetsTable
+            {grammar}
+            {firstSets}
+            dependencies={firstSetsDependencies} />
+          <FollowSetsTable {followSets} dependencies={followSetsDependencies} />
         {/if}
       </div>
     </div>
