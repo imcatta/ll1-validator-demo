@@ -23,15 +23,17 @@
   let firstSetsDependencies;
   let followSetsDependencies;
   let lookAheads;
+  let axiom;
 
   function calculate() {
     grammar = parser.parseString(grammarString);
-    delete grammar._start_symbol;
+    axiom=grammar._start_symbol;
     firstSets = ll1.calculateFirstSets(grammar);
     followSets = ll1.calculateFollowSets(grammar);
     firstSetsDependencies = ll1.calculateFirstSetsDependencies(grammar);
-    followSetsDependencies = ll1.calculateFollowSetDipendencies(grammar);
+    followSetsDependencies = ll1.calculateFollowSetDipendencies(grammar,axiom);
     lookAheads = ll1.calculateLookAheads(grammar);
+    delete grammar._start_symbol;
   }
   calculate();
 </script>
