@@ -82,11 +82,11 @@
         <td class="separator" />
         {#if confArray[l][index]===true}
           <td class="has-background-danger">
-            <Set set={`{${lookAheads[l][index]}}`}/>
+            <Set set={lookAheads[l][index]}/>
           </td>
         {:else}
           <td>
-            <Set set={`{${lookAheads[l][index]}}`}/>
+            <Set set={lookAheads[l][index]}/>
           </td>
         {/if}
       </tr>
