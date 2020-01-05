@@ -1,9 +1,12 @@
 <script>
+  import { onMount } from "svelte";
   import FirstSetsLookAheadTable from "./FirstSetsLookAheadTable.svelte";
   import FollowSetsTable from "./FollowSetsTable.svelte";
   import { parser, ll1 } from "ll1-validator";
+  const ace = require("ace-builds/src-noconflict/ace");
 
-  let grammarString =
+  let editor;
+  let defaultGrammarString =
     "/* this is the grammar \n" +
     "used to parse the input */\n" +
     "_start_symbol S; // optional, 'S' by default\n\n" +
@@ -28,18 +31,27 @@
   let conflicts;
 
   function calculate() {
+    const grammarString = editor.getValue();
     grammar = parser.parseString(grammarString);
-    axiom=grammar._start_symbol;
+    axiom = grammar._start_symbol;
     firstSets = ll1.calculateFirstSets(grammar);
     followSets = ll1.calculateFollowSets(grammar);
     firstSetsDependencies = ll1.calculateFirstSetsDependencies(grammar);
-    followSetsDependencies = ll1.calculateFollowSetDipendencies(grammar,axiom);
+    followSetsDependencies = ll1.calculateFollowSetDipendencies(grammar, axiom);
     lookAheads = ll1.calculateLookAheads(grammar);
-    isLL1=ll1.isLL1(grammar);
-    conflicts=ll1.calculateAllConflicts(grammar);
+    isLL1 = ll1.isLL1(grammar);
+    conflicts = ll1.calculateAllConflicts(grammar);
     delete grammar._start_symbol;
   }
-  calculate();
+
+  onMount(() => {
+    editor = ace.edit("editor");
+    editor.setTheme(require("ace-builds/src-noconflict/theme-chrome"));
+    editor.setFontSize("13px");
+    editor.setValue(defaultGrammarString, 1);
+
+    calculate();
+  });
 </script>
 
 <style>
@@ -52,8 +64,10 @@
   :global(.dependency) {
     background-color: #d9e9f6;
   }
-  .textarea {
-    margin-bottom: 5px;
+
+  #editor {
+    margin-bottom: 15px;
+    min-height: 400px;
   }
   .container {
     padding-top: 5px;
@@ -73,18 +87,14 @@
   <div class="columns">
     <div class="column is-one-third">
       <div class="box">
-        <textarea rows="15" class="textarea" bind:value={grammarString} />
+        <div id="editor" />
         <button class="button is-primary" on:click={calculate}>
           Calculate
         </button>
       </div>
       <div class="content is-small">
         <h2>
-        {#if isLL1}
-            The grammar is LL1
-        {:else}
-          The grammar is not LL1
-        {/if}
+          {#if isLL1}The grammar is LL1{:else}The grammar is not LL1{/if}
         </h2>
       </div>
     </div>
@@ -97,7 +107,7 @@
             dependencies={firstSetsDependencies}
             {lookAheads}
             {conflicts} />
-          <FollowSetsTable {followSets} dependencies={followSetsDependencies} />         
+          <FollowSetsTable {followSets} dependencies={followSetsDependencies} />
         {/if}
       </div>
     </div>

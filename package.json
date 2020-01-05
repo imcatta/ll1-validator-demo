@@ -19,6 +19,7 @@
     "dev": "webpack-dev-server --content-base public"
   },
   "dependencies": {
+    "ace-builds": "^1.4.7",
     "ll1-validator": "0.0.12"
   }
 }
