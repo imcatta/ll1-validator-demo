@@ -49,7 +49,7 @@
       <th>{iteration}</th>
     {/each}
     <th class="separator" />
-    <th>Look aheads</th>
+    <th>Look Aheads</th>
   </tr>
   {#each Object.keys(grammar) as l}
     {#each grammar[l] as rule, index}
