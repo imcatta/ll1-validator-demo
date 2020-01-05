@@ -1,4 +1,6 @@
 <script>
+  import Set from "./Set.svelte";
+
   export let followSets = {};
   export let dependencies = {};
 
@@ -15,15 +17,8 @@
     }
   }
 
-  function onCellClick(l, iteration) {
-    const newSelection = `${l}_${iteration}`;
-    if (selectedCell === newSelection) {
-      selectedCell = undefined;
-      dependencyCells = [];
-      return;
-    }
-
-    selectedCell = newSelection;
+  function onCellEnter(l, iteration) {
+    selectedCell = `${l}_${iteration}`;
     dependencyCells = [];
 
     if (iteration >= 1) {
@@ -31,6 +26,11 @@
         dependencyCells.push(`${v}_${iteration - 1}`);
       });
     }
+  }
+
+  function onCellLeave() {
+    selectedCell = undefined;
+    dependencyCells = [];
   }
 </script>
 
@@ -46,10 +46,11 @@
       <td>{l}</td>
       {#each followSets[l] as set, iteration}
         <td
-          on:click={onCellClick(l, iteration)}
+          on:mouseenter={onCellEnter(l, iteration)}
+          on:mouseleave={onCellLeave}
           class:selected={selectedCell === `${l}_${iteration}`}
           class:dependency={dependencyCells.includes(`${l}_${iteration}`)}>
-          {#if set.length}{`{${set}}`}{:else}∅{/if}
+          <Set {set} />
         </td>
       {/each}
     </tr>

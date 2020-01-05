@@ -47,10 +47,10 @@
     background-color: #efefef !important;
   }
   :global(.selected) {
-    background-color: #dedede;
+    background-color: #e5f8d5;
   }
   :global(.dependency) {
-    background-color: #d2eaff;
+    background-color: #d9e9f6;
   }
   .textarea {
     margin-bottom: 5px;

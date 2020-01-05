@@ -1,18 +1,10 @@
-# svelte app
+# LL(1) Validator - Demo [![Netlify Status](https://api.netlify.com/api/v1/badges/dbcf482b-152c-48ca-b8a2-49365e4656ab/deploy-status)](https://app.netlify.com/sites/ll1-validator/deploys)
 
-This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template-webpack.
+A web application that shows [ll1-validator](https://github.com/imcatta/ll1-validator) in action. Built with [Svelte](https://svelte.dev/).
 
-To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
+The demo is public available at [https://ll1-validator.netlify.com/](https://ll1-validator.netlify.com/).
 
-```bash
-npx degit sveltejs/template-webpack svelte-app
-cd svelte-app
-```
-
-*Note that you will need to have [Node.js](https://nodejs.org) installed.*
-
-
-## Get started
+## Development
 
 Install the dependencies...
 
@@ -29,36 +21,8 @@ npm run dev
 
 Navigate to [localhost:8080](http://localhost:8080). You should see your app running. Edit a component file in `src`, save it, and the page should reload with your changes.
 
-
-## Deploying to the web
-
-### With [now](https://zeit.co/now)
-
-Install `now` if you haven't already:
+If you want to make changes to the [ll1-validator](https://github.com/imcatta/ll1-validator) package and immediately see the results download the repository from [https://github.com/imcatta/ll1-validator](https://github.com/imcatta/ll1-validator) and run
 
 ```bash
-npm install -g now
-```
-
-Then, from within your project folder:
-
-```bash
-now
-```
-
-As an alternative, use the [Now desktop client](https://zeit.co/download) and simply drag the unzipped project folder to the taskbar icon.
-
-### With [surge](https://surge.sh/)
-
-Install `surge` if you haven't already:
-
-```bash
-npm install -g surge
-```
-
-Then, from within your project folder:
-
-```bash
-npm run build
-surge public
+npm link <path-to-ll1-validator>
 ```
