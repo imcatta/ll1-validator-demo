@@ -1,4 +1,6 @@
 <script>
+  import Set from "./Set.svelte";
+
   export let firstSets = {};
   export let dependencies = {};
   export let grammar = {};
@@ -62,11 +64,13 @@
             on:mouseleave={onCellLeave}
             class:selected={selectedCell === `${l}_${index}_${iteration}`}
             class:dependency={dependencyCells.includes(`${l}_${iteration}`)}>
-            {#if set.length}{`{${set}}`}{:else}∅{/if}
+            <Set {set} />
           </td>
         {/each}
         <td class="separator" />
-        <td>{`{${lookAheads[l][index]}}`}</td>
+        <td>
+          <Set set={lookAheads[l][index]} />
+        </td>
       </tr>
     {/each}
   {/each}

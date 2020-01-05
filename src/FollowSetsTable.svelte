@@ -1,4 +1,6 @@
 <script>
+  import Set from "./Set.svelte";
+
   export let followSets = {};
   export let dependencies = {};
 
@@ -48,7 +50,7 @@
           on:mouseleave={onCellLeave}
           class:selected={selectedCell === `${l}_${iteration}`}
           class:dependency={dependencyCells.includes(`${l}_${iteration}`)}>
-          {#if set.length}{`{${set}}`}{:else}∅{/if}
+          <Set {set} />
         </td>
       {/each}
     </tr>
