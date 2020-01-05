@@ -24,6 +24,8 @@
   let followSetsDependencies;
   let lookAheads;
   let axiom;
+  let isLL1;
+  let conflicts;
 
   function calculate() {
     grammar = parser.parseString(grammarString);
@@ -33,6 +35,8 @@
     firstSetsDependencies = ll1.calculateFirstSetsDependencies(grammar);
     followSetsDependencies = ll1.calculateFollowSetDipendencies(grammar,axiom);
     lookAheads = ll1.calculateLookAheads(grammar);
+    isLL1=ll1.isLL1(grammar);
+    conflicts=ll1.calculateAllConflicts(grammar);
     delete grammar._start_symbol;
   }
   calculate();
@@ -74,6 +78,15 @@
           Calculate
         </button>
       </div>
+      <div class="content is-small">
+        <h2>
+        {#if isLL1}
+            The grammar is LL1
+        {:else}
+          The grammar is not LL1
+        {/if}
+        </h2>
+      </div>
     </div>
     <div class="column">
       <div class="box">
@@ -82,8 +95,9 @@
             {grammar}
             {firstSets}
             dependencies={firstSetsDependencies}
-            {lookAheads} />
-          <FollowSetsTable {followSets} dependencies={followSetsDependencies} />
+            {lookAheads}
+            {conflicts} />
+          <FollowSetsTable {followSets} dependencies={followSetsDependencies} />         
         {/if}
       </div>
     </div>

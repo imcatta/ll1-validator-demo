@@ -19,6 +19,6 @@
     "dev": "webpack-dev-server --content-base public"
   },
   "dependencies": {
-    "ll1-validator": "0.0.11"
+    "ll1-validator": "0.0.12"
   }
 }

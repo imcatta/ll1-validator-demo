@@ -3,10 +3,12 @@
   export let dependencies = {};
   export let grammar = {};
   export let lookAheads = {};
+  export let conflicts= {};
 
   let iterations;
   let dependencyCells = [];
   let selectedCell;
+  let confArray={};
 
   $: {
     const nonTerminal = Object.keys(grammar)[0];
@@ -15,6 +17,16 @@
     } else {
       iterations = [];
     }
+    Object.keys(lookAheads).forEach(l =>{
+      confArray[l]=[];
+      lookAheads[l].forEach((r,index) => {
+        r.forEach(nt =>{
+          if(conflicts[l].includes(nt)){
+            confArray[l][index]=true;
+          }
+        });
+      });
+    });
   }
 
   function onCellClick(l, index, iteration) {
@@ -67,7 +79,11 @@
           </td>
         {/each}
         <td class="separator" />
-        <td>{`{${lookAheads[l][index]}}`}</td>
+        {#if confArray[l][index]===true}
+          <td class="has-background-danger">{`{${lookAheads[l][index]}}`}</td>
+        {:else}
+          <td>{`{${lookAheads[l][index]}}`}</td>
+        {/if}
       </tr>
     {/each}
   {/each}
