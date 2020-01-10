@@ -26,18 +26,98 @@
   let axiom;
   let isLL1;
   let conflicts;
+  let resulttxt;
+
+  function cleanVariables(){
+    grammar=undefined;
+    firstSets={};
+    followSets={};
+    firstSetsDependencies={};
+    followSetsDependencies={};
+    lookAheads={};
+    axiom="";
+    isLL1=undefined;
+    conflicts={};
+  }
+
+  function checkGrammar(){
+    let arrLines= grammarString.match(/[^\r\n]+/g);
+    let grammarOk=true;
+    let commentLine=false
+    arrLines.forEach((l,index) =>{
+      if(grammarOk){
+        l= l.replace(/\s/g, '');
+        if(l.includes("/*")){
+          commentLine=true;
+        }
+        else if (l.includes("*/")){
+          if(commentLine)
+            commentLine=false;
+          else{
+            grammarOk=false;
+            resulttxt= " Tried to close a comment section that didn't start anywhere at line "+(index+1);
+          }
+        }
+        else{
+          if (!commentLine)
+          {
+            l= l.split("//")[0]
+            if(l.length>0 && !(l[l.length-1]===";")){
+              grammarOk=false;
+              resulttxt="Missing ; in line "+(index+1);
+            }
+          }
+        }
+      }
+    });
+    return grammarOk;
+  }
 
   function calculate() {
-    grammar = parser.parseString(grammarString);
-    axiom=grammar._start_symbol;
-    firstSets = ll1.calculateFirstSets(grammar);
-    followSets = ll1.calculateFollowSets(grammar);
-    firstSetsDependencies = ll1.calculateFirstSetsDependencies(grammar);
-    followSetsDependencies = ll1.calculateFollowSetDipendencies(grammar,axiom);
-    lookAheads = ll1.calculateLookAheads(grammar);
-    isLL1=ll1.isLL1(grammar);
-    conflicts=ll1.calculateAllConflicts(grammar);
+    resulttxt=""
+    cleanVariables();
+    if(checkGrammar()){
+    try{
+      grammar = parser.parseString(grammarString);
+      }
+    catch (e)
+    {
+      cleanVariables();
+      resulttxt="Error while parsing the grammar. Please check carefully"
+      console.log(e)
+    }
+    if(grammar){
+      try{
+        axiom=grammar._start_symbol;
+        firstSets = ll1.calculateFirstSets(grammar);
+        followSets = ll1.calculateFollowSets(grammar);
+        firstSetsDependencies = ll1.calculateFirstSetsDependencies(grammar);
+        followSetsDependencies = ll1.calculateFollowSetDipendencies(grammar,axiom);
+        lookAheads = ll1.calculateLookAheads(grammar);
+        isLL1=ll1.isLL1(grammar);
+        conflicts=ll1.calculateAllConflicts(grammar);
+      }
+      catch(err)
+      {
+        cleanVariables();
+        resulttxt="Error while calculating LL1. If the error persist, please contact the developers."
+        console.log(err)
+      }
+
+    }
     delete grammar._start_symbol;
+    }
+    else
+    {
+      cleanVariables();
+    }
+    if(isLL1!=undefined)
+    {
+      if(isLL1)
+        resulttxt="The grammar is LL1"
+      else if (!isLL1)
+        resulttxt="The grammar is not LL1"
+        }
   }
   calculate();
 </script>
@@ -80,11 +160,7 @@
       </div>
       <div class="content is-small">
         <h2>
-        {#if isLL1}
-            The grammar is LL1
-        {:else}
-          The grammar is not LL1
-        {/if}
+          {resulttxt}
         </h2>
       </div>
     </div>
