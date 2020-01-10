@@ -16,7 +16,7 @@
     "L -> nt;\n" +
     "R -> nt R;\n" +
     "R -> t R;\n" +
-    "R -> ; // you can also use inline comments\n";
+    "R -> ;\n";
   let grammar;
   let firstSets;
   let followSets;
