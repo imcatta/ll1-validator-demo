@@ -84,7 +84,8 @@
     {
       cleanVariables();
       resulttxt="Error while parsing the grammar. Please check carefully"
-      console.log(e)
+      if(e)
+        console.error(e);
     }
     if(grammar){
       try{
@@ -92,7 +93,7 @@
         firstSets = ll1.calculateFirstSets(grammar);
         followSets = ll1.calculateFollowSets(grammar);
         firstSetsDependencies = ll1.calculateFirstSetsDependencies(grammar);
-        followSetsDependencies = ll1.calculateFollowSetDipendencies(grammar,axiom);
+        followSetsDependencies = ll1.calculateFollowSetDependencies(grammar,axiom);
         lookAheads = ll1.calculateLookAheads(grammar);
         isLL1=ll1.isLL1(grammar);
         conflicts=ll1.calculateAllConflicts(grammar);
@@ -101,7 +102,8 @@
       {
         cleanVariables();
         resulttxt="Error while calculating LL1. If the error persist, please contact the developers."
-        console.log(err)
+        if(err)
+          console.error(err);
       }
 
     }
