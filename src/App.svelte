@@ -121,9 +121,11 @@
           Calculate
         </button>
       </div>
-      <div class="content is-small">
-        <h2>{resulttxt}</h2>
-      </div>
+      {#if resulttxt}
+        <div class="content is-small">
+          <h2>{resulttxt}</h2>
+        </div>
+      {/if}
     </div>
     <div class="column">
       {#if grammar}
