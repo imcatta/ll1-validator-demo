@@ -6,7 +6,7 @@
   let grammarString =
     "/* this is the grammar \n" +
     "used to parse the input */\n" +
-    "_start_symbol S; // optional, 'S' by default\n\n" +
+    "_start_symbol S; // optional\n\n" +
     "S -> SS RULE RULELIST;\n" +
     "SS -> ssk nt semicolon;\n" +
     "SS -> ;\n" +
@@ -27,99 +27,49 @@
   let isLL1;
   let conflicts;
   let resulttxt;
+  let errorMessage;
 
-  function cleanVariables(){
-    grammar=undefined;
-    firstSets={};
-    followSets={};
-    firstSetsDependencies={};
-    followSetsDependencies={};
-    lookAheads={};
-    axiom="";
-    isLL1=undefined;
-    conflicts={};
-  }
-
-  function checkGrammar(){
-    let arrLines= grammarString.match(/[^\r\n]+/g);
-    let grammarOk=true;
-    let commentLine=false
-    arrLines.forEach((l,index) =>{
-      if(grammarOk){
-        l= l.replace(/\s/g, '');
-        if(l.includes("/*")){
-          commentLine=true;
-        }
-        else if (l.includes("*/")){
-          if(commentLine)
-            commentLine=false;
-          else{
-            grammarOk=false;
-            resulttxt= " Tried to close a comment section that didn't start anywhere at line "+(index+1);
-          }
-        }
-        else{
-          if (!commentLine)
-          {
-            l= l.split("//")[0]
-            if(l.length>0 && !(l[l.length-1]===";")){
-              grammarOk=false;
-              resulttxt="Missing ; in line "+(index+1);
-            }
-          }
-        }
-      }
-    });
-    return grammarOk;
+  function clearVariables() {
+    grammar = undefined;
+    firstSets = undefined;
+    followSets = undefined;
+    firstSetsDependencies = undefined;
+    followSetsDependencies = undefined;
+    lookAheads = undefined;
+    axiom = undefined;
+    isLL1 = undefined;
+    conflicts = undefined;
+    resulttxt = undefined;
+    errorMessage = undefined;
   }
 
   function calculate() {
-    resulttxt=""
-    cleanVariables();
-    if(checkGrammar()){
-    try{
-      grammar = parser.parseString(grammarString);
-      }
-    catch (e)
-    {
-      cleanVariables();
-      resulttxt="Error while parsing the grammar. Please check carefully"
-      if(e)
-        console.error(e);
-    }
-    if(grammar){
-      try{
-        axiom=grammar._start_symbol;
-        firstSets = ll1.calculateFirstSets(grammar);
-        followSets = ll1.calculateFollowSets(grammar);
-        firstSetsDependencies = ll1.calculateFirstSetsDependencies(grammar);
-        followSetsDependencies = ll1.calculateFollowSetDependencies(grammar,axiom);
-        lookAheads = ll1.calculateLookAheads(grammar);
-        isLL1=ll1.isLL1(grammar);
-        conflicts=ll1.calculateAllConflicts(grammar);
-      }
-      catch(err)
-      {
-        cleanVariables();
-        resulttxt="Error while calculating LL1. If the error persist, please contact the developers."
-        if(err)
-          console.error(err);
-      }
+    clearVariables();
 
+    try {
+      grammar = parser.parseString(grammarString);
+      axiom = grammar._start_symbol;
+      firstSets = ll1.calculateFirstSets(grammar);
+      followSets = ll1.calculateFollowSets(grammar);
+      firstSetsDependencies = ll1.calculateFirstSetsDependencies(grammar);
+      followSetsDependencies = ll1.calculateFollowSetDependencies(
+        grammar,
+        axiom
+      );
+      lookAheads = ll1.calculateLookAheads(grammar);
+      isLL1 = ll1.isLL1(grammar);
+      conflicts = ll1.calculateAllConflicts(grammar);
+    } catch (e) {
+      errorMessage = e.message;
+      return;
     }
+
     delete grammar._start_symbol;
+
+    if (isLL1 != undefined) {
+      if (isLL1) resulttxt = "The grammar is LL1";
+      else if (!isLL1) resulttxt = "The grammar is not LL1";
     }
-    else
-    {
-      cleanVariables();
-    }
-    if(isLL1!=undefined)
-    {
-      if(isLL1)
-        resulttxt="The grammar is LL1"
-      else if (!isLL1)
-        resulttxt="The grammar is not LL1"
-        }
   }
   calculate();
 </script>
@@ -136,6 +86,7 @@
   }
   .textarea {
     margin-bottom: 5px;
+    font-family: monospace;
   }
   .container {
     padding-top: 5px;
@@ -148,6 +99,13 @@
     margin-top: 4px;
     margin-left: 8px;
   }
+  .help {
+    border-left: solid 4px;
+    padding-left: 5px;
+    margin-bottom: 5px;
+    font-size: 13px;
+    font-family: monospace;
+  }
 </style>
 
 <div class="container">
@@ -156,28 +114,29 @@
     <div class="column is-one-third">
       <div class="box">
         <textarea rows="15" class="textarea" bind:value={grammarString} />
+        {#if errorMessage}
+          <p class="help is-danger mb-2">{errorMessage}</p>
+        {/if}
         <button class="button is-primary" on:click={calculate}>
           Calculate
         </button>
       </div>
       <div class="content is-small">
-        <h2>
-          {resulttxt}
-        </h2>
+        <h2>{resulttxt}</h2>
       </div>
     </div>
     <div class="column">
-      <div class="box">
-        {#if grammar}
+      {#if grammar}
+        <div class="box">
           <FirstSetsLookAheadTable
             {grammar}
             {firstSets}
             dependencies={firstSetsDependencies}
             {lookAheads}
             {conflicts} />
-          <FollowSetsTable {followSets} dependencies={followSetsDependencies} />         
-        {/if}
-      </div>
+          <FollowSetsTable {followSets} dependencies={followSetsDependencies} />
+        </div>
+      {/if}
     </div>
   </div>
 </div>

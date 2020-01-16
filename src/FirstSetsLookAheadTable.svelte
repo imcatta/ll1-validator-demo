@@ -5,12 +5,12 @@
   export let dependencies = {};
   export let grammar = {};
   export let lookAheads = {};
-  export let conflicts= {};
+  export let conflicts = {};
 
   let iterations;
   let dependencyCells = [];
   let selectedCell;
-  let confArray={};
+  let confArray = {};
 
   $: {
     const nonTerminal = Object.keys(grammar)[0];
@@ -19,12 +19,12 @@
     } else {
       iterations = [];
     }
-    Object.keys(lookAheads).forEach(l =>{
-      confArray[l]=[];
-      lookAheads[l].forEach((r,index) => {
-        r.forEach(nt =>{
-          if(conflicts[l].includes(nt)){
-            confArray[l][index]=true;
+    Object.keys(lookAheads).forEach(l => {
+      confArray[l] = [];
+      lookAheads[l].forEach((r, index) => {
+        r.forEach(nt => {
+          if (conflicts[l].includes(nt)) {
+            confArray[l][index] = true;
           }
         });
       });
@@ -51,6 +51,9 @@
 <style>
   .separator {
     background-color: #efefef;
+  }
+  .conflict {
+    background-color: #fdc3c3;
   }
 </style>
 
@@ -80,13 +83,13 @@
           </td>
         {/each}
         <td class="separator" />
-        {#if confArray[l][index]===true}
-          <td class="has-background-danger">
-            <Set set={lookAheads[l][index]}/>
+        {#if confArray[l][index] === true}
+          <td class="conflict">
+            <Set set={lookAheads[l][index]} />
           </td>
         {:else}
           <td>
-            <Set set={lookAheads[l][index]}/>
+            <Set set={lookAheads[l][index]} />
           </td>
         {/if}
       </tr>
