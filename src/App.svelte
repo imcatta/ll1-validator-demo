@@ -61,6 +61,7 @@
       conflicts = ll1.calculateAllConflicts(grammar);
     } catch (e) {
       errorMessage = e.message;
+      clearVariables();
       return;
     }
 
