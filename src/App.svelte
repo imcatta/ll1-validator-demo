@@ -60,8 +60,8 @@
       isLL1 = ll1.isLL1(grammar);
       conflicts = ll1.calculateAllConflicts(grammar);
     } catch (e) {
-      errorMessage = e.message;
       clearVariables();
+      errorMessage = e.message;      
       return;
     }
 
