@@ -1,12 +1,28 @@
 <script>
   import FirstSetsLookAheadTable from "./FirstSetsLookAheadTable.svelte";
   import FollowSetsTable from "./FollowSetsTable.svelte";
-  import { parser, ll1 } from "ll1-validator";
+  import GrammarInformation from "./GrammarInformation.svelte";
+  import { validate } from "ll1-validator";
 
+  let grammar;
+  let startSymbol;
+  let rulesNumber;
+  let nullableNonTerminals;
+  let terminals;
+  let nonTerminals;
+  let firstSets;
+  let followSets;
+  let firstSetsDependencies;
+  let followSetsDependencies;
+  let lookAheads;
+  let isLL1;
+  let lookAheadsConflicts;
+  let errorMessage;
+  let resultText;
   let grammarString =
     "/* this is the grammar \n" +
     "used to parse the input */\n" +
-    "_start_symbol S; // optional\n\n" +
+    "#start_symbol S; // optional\n\n" +
     "S -> SS RULE RULELIST;\n" +
     "SS -> ssk nt semicolon;\n" +
     "SS -> ;\n" +
@@ -17,59 +33,45 @@
     "R -> nt R;\n" +
     "R -> t R;\n" +
     "R -> ;\n";
-  let grammar;
-  let firstSets;
-  let followSets;
-  let firstSetsDependencies;
-  let followSetsDependencies;
-  let lookAheads;
-  let axiom;
-  let isLL1;
-  let conflicts;
-  let resulttxt;
-  let errorMessage;
 
   function clearVariables() {
     grammar = undefined;
+    startSymbol = undefined;
+    rulesNumber = undefined;
+    nullableNonTerminals = undefined;
+    terminals = undefined;
+    nonTerminals = undefined;
     firstSets = undefined;
     followSets = undefined;
     firstSetsDependencies = undefined;
     followSetsDependencies = undefined;
     lookAheads = undefined;
-    axiom = undefined;
     isLL1 = undefined;
-    conflicts = undefined;
-    resulttxt = undefined;
-    errorMessage = undefined;
+    lookAheadsConflicts = undefined;
   }
 
   function calculate() {
-    clearVariables();
-
     try {
-      grammar = parser.parseString(grammarString);
-      axiom = grammar._start_symbol;
-      firstSets = ll1.calculateFirstSets(grammar);
-      followSets = ll1.calculateFollowSets(grammar);
-      firstSetsDependencies = ll1.calculateFirstSetsDependencies(grammar);
-      followSetsDependencies = ll1.calculateFollowSetDependencies(
+      ({
         grammar,
-        axiom
-      );
-      lookAheads = ll1.calculateLookAheads(grammar);
-      isLL1 = ll1.isLL1(grammar);
-      conflicts = ll1.calculateAllConflicts(grammar);
+        startSymbol,
+        rulesNumber,
+        nullableNonTerminals,
+        terminals,
+        nonTerminals,
+        firstSets,
+        followSets,
+        firstSetsDependencies,
+        followSetsDependencies,
+        lookAheads,
+        isLL1,
+        lookAheadsConflicts
+      } = validate(grammarString));
+      resultText = isLL1 ? "The grammar is LL1" : "The grammar is not LL1";
     } catch (e) {
       clearVariables();
-      errorMessage = e.message;      
-      return;
-    }
-
-    delete grammar._start_symbol;
-
-    if (isLL1 != undefined) {
-      if (isLL1) resulttxt = "The grammar is LL1";
-      else if (!isLL1) resulttxt = "The grammar is not LL1";
+      resultText = undefined;
+      errorMessage = e.message;
     }
   }
   calculate();
@@ -122,21 +124,25 @@
           Calculate
         </button>
       </div>
-      {#if resulttxt}
-        <div class="content is-small">
-          <h2>{resulttxt}</h2>
+      {#if resultText}
+        <div class="box">
+          <GrammarInformation
+            {resultText}
+            {terminals}
+            {nonTerminals}
+            {nullableNonTerminals} />
         </div>
       {/if}
     </div>
     <div class="column">
-      {#if grammar}
+      {#if resultText}
         <div class="box">
           <FirstSetsLookAheadTable
             {grammar}
             {firstSets}
             dependencies={firstSetsDependencies}
             {lookAheads}
-            {conflicts} />
+            {lookAheadsConflicts} />
           <FollowSetsTable {followSets} dependencies={followSetsDependencies} />
         </div>
       {/if}

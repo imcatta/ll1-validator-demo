@@ -5,7 +5,7 @@
   export let dependencies = {};
   export let grammar = {};
   export let lookAheads = {};
-  export let conflicts = {};
+  export let lookAheadsConflicts = {};
 
   let iterations;
   let dependencyCells = [];
@@ -23,7 +23,7 @@
       confArray[l] = [];
       lookAheads[l].forEach((r, index) => {
         r.forEach(nt => {
-          if (conflicts[l].includes(nt)) {
+          if (lookAheadsConflicts[l].includes(nt)) {
             confArray[l][index] = true;
           }
         });

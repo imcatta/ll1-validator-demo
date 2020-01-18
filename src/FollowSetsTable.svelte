@@ -36,7 +36,7 @@
 
 <table class="table is-bordered">
   <tr>
-    <th>Non terminal</th>
+    <th>Nonterminal</th>
     {#each iterations as iteration}
       <th>{iteration}</th>
     {/each}
