@@ -24,14 +24,13 @@
     "used to parse the input */\n" +
     "#start_symbol S; // optional\n\n" +
     "S -> SS RULE RULELIST;\n" +
-    "SS -> ssk nt semicolon;\n" +
+    "SS -> ssk sym semicolon;\n" +
     "SS -> ;\n" +
     "RULELIST -> RULE RULELIST;\n" +
     "RULELIST -> ;\n" +
     "RULE -> L assign R semicolon;\n" +
-    "L -> nt;\n" +
-    "R -> nt R;\n" +
-    "R -> t R;\n" +
+    "L -> sym;\n" +
+    "R -> sym R;\n" +
     "R -> ;\n";
 
   function clearVariables() {
