@@ -67,6 +67,7 @@
         lookAheadsConflicts
       } = validate(grammarString));
       resultText = isLL1 ? "The grammar is LL1" : "The grammar is not LL1";
+      errorMessage = undefined;
     } catch (e) {
       clearVariables();
       resultText = undefined;
