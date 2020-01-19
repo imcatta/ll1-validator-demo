@@ -68,7 +68,6 @@
       errorMessage = undefined;
     } catch (e) {
       clearVariables();
-      resultText = undefined;
       errorMessage = e.message;
     }
   }
