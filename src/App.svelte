@@ -18,7 +18,6 @@
   let isLL1;
   let lookAheadsConflicts;
   let errorMessage;
-  let resultText;
   let grammarString =
     "/* this is the grammar \n" +
     "used to parse the input */\n" +
@@ -66,7 +65,6 @@
         isLL1,
         lookAheadsConflicts
       } = validate(grammarString));
-      resultText = isLL1 ? "The grammar is LL1" : "The grammar is not LL1";
       errorMessage = undefined;
     } catch (e) {
       clearVariables();
@@ -124,10 +122,10 @@
           Calculate
         </button>
       </div>
-      {#if resultText}
+      {#if grammar}
         <div class="box">
           <GrammarInformation
-            {resultText}
+            {isLL1}
             {terminals}
             {nonTerminals}
             {nullableNonTerminals} />
@@ -135,7 +133,7 @@
       {/if}
     </div>
     <div class="column">
-      {#if resultText}
+      {#if grammar}
         <div class="box">
           <FirstSetsLookAheadTable
             {grammar}
