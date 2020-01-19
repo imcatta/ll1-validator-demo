@@ -1,11 +1,13 @@
 <script>
   import Set from "./Set.svelte";
+  import Rule from "./Rule.svelte";
 
   export let firstSets = {};
   export let dependencies = {};
   export let grammar = {};
   export let lookAheads = {};
   export let lookAheadsConflicts = {};
+  export let warnings = [];
 
   let iterations;
   let dependencyCells = [];
@@ -70,8 +72,7 @@
     {#each grammar[l] as rule, index}
       <tr>
         <td>
-          {l} ->
-          {#each rule as item}{item.value}&nbsp;{:else}ε{/each}
+          <Rule {l} {rule} {index} {warnings} />
         </td>
         {#each firstSets[l][index] as set, iteration}
           <td

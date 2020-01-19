@@ -10,6 +10,7 @@
   let nullableNonTerminals;
   let terminals;
   let nonTerminals;
+  let warnings;
   let firstSets;
   let followSets;
   let firstSetsDependencies;
@@ -38,6 +39,7 @@
     rulesNumber = undefined;
     nullableNonTerminals = undefined;
     terminals = undefined;
+    warnings = undefined;
     nonTerminals = undefined;
     firstSets = undefined;
     followSets = undefined;
@@ -57,6 +59,7 @@
         nullableNonTerminals,
         terminals,
         nonTerminals,
+        warnings,
         firstSets,
         followSets,
         firstSetsDependencies,
@@ -75,6 +78,9 @@
 </script>
 
 <style>
+  @import "../node_modules/bulma/css/bulma.min.css";
+  @import "../node_modules/bulma-tooltip/dist/css/bulma-tooltip.min.css";
+
   :global(html) {
     background-color: #efefef !important;
   }
@@ -139,7 +145,8 @@
             {firstSets}
             dependencies={firstSetsDependencies}
             {lookAheads}
-            {lookAheadsConflicts} />
+            {lookAheadsConflicts}
+            {warnings} />
           <FollowSetsTable {followSets} dependencies={followSetsDependencies} />
         </div>
       {/if}

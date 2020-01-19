@@ -19,6 +19,8 @@
     "dev": "webpack-dev-server --content-base public"
   },
   "dependencies": {
-    "ll1-validator": "^0.1.1"
+    "bulma": "^0.8.0",
+    "bulma-tooltip": "^3.0.2",
+    "ll1-validator": "^0.1.2"
   }
 }
