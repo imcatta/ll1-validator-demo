@@ -3,7 +3,7 @@
     "lang": "English",
     "name": "LL(1) Validator",
     "scope": "/",
-    "display": "browser",
+    "display": "standalone",
     "short_name": "LL(1) Validator",
     "theme_color": "transparent",
     "description": "Checks if a given a context-free grammar is a LL(1) grammar.",
