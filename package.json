@@ -21,6 +21,6 @@
   "dependencies": {
     "bulma": "^0.8.0",
     "bulma-tooltip": "^3.0.2",
-    "ll1-validator": "^0.2.0"
+    "ll1-validator": "^0.2.1"
   }
 }
