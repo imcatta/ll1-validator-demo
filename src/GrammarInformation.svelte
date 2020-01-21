@@ -21,9 +21,10 @@
     <th>LL(1)</th>
     <td>
       <span
-        class="icon"
+        class="icon has-tooltip-right"
         class:has-text-success={isLL1}
-        class:has-text-danger={!isLL1}>
+        class:has-text-danger={!isLL1}
+        data-tooltip={isLL1 ? 'The grammar is LL(1)' : 'The grammar is not LL(1)'}>
         <i
           class="fas fa-lg"
           class:fa-check-circle={isLL1}
