@@ -13,6 +13,7 @@
   let dependencyCells = [];
   let selectedCell;
   let confArray = {};
+  let selectedRule;
 
   $: {
     const nonTerminal = Object.keys(grammar)[0];
@@ -34,12 +35,12 @@
   }
 
   function onCellEnter(l, index, iteration) {
-    selectedCell = `${l}_${index}_${iteration}`;
+    selectedCell = `${l}#${index}#${iteration}`;
     dependencyCells = [];
 
     if (iteration >= 1) {
       dependencies[l][index].forEach(v => {
-        dependencyCells.push(`${v}_${iteration - 1}`);
+        dependencyCells.push(`${v}#${iteration - 1}`);
       });
     }
   }
@@ -47,6 +48,40 @@
   function onCellLeave() {
     selectedCell = undefined;
     dependencyCells = [];
+  }
+
+  function getDuplicateRuleWarningMessage(l, index) {
+    const warn = warnings.find(
+      v =>
+        v.nonTerminal === l &&
+        v.index === index &&
+        v.constructor.name === "DuplicatedRuleWarning"
+    );
+    return warn ? warn.message : undefined;
+  }
+
+  function getUnreachableRuleWarningMessage(l) {
+    const warn = warnings.find(
+      v =>
+        v.nonTerminal === l && v.constructor.name === "UnreachableRuleWarning"
+    );
+    return warn ? warn.message : undefined;
+  }
+
+  function onWarnMouseEnter(l, index) {
+    console.log("onWarnMouseEnter");
+    const warn = warnings.find(
+      v =>
+        v.nonTerminal === l &&
+        v.index === index &&
+        v.constructor.name === "DuplicatedRuleWarning"
+    );
+    selectedRule = `${warn.nonTerminal}#${warn.sameAs}`;
+    console.log(selectedRule);
+  }
+
+  function onWarnMouseLeave() {
+    selectedRule = undefined;
   }
 </script>
 
@@ -56,6 +91,9 @@
   }
   .conflict {
     background-color: #fdc3c3;
+  }
+  .selected-rule {
+    background-color: #fdf9c3;
   }
 </style>
 
@@ -71,28 +109,29 @@
   {#each Object.keys(grammar) as l}
     {#each grammar[l] as rule, index}
       <tr>
-        <td>
-          <Rule {l} {rule} {index} {warnings} />
+        <td class:selected-rule={selectedRule === `${l}#${index}`}>
+          <Rule
+            {l}
+            {rule}
+            {index}
+            duplicatedRuleWarningMessage={getDuplicateRuleWarningMessage(l, index)}
+            unreachableRuleWarningMessage={getUnreachableRuleWarningMessage(l)}
+            on:duplicatedRuleWarningMouseEnter={() => onWarnMouseEnter(l, index)}
+            on:duplicatedRuleWarningMouseLeave={() => onWarnMouseLeave()} />
         </td>
         {#each firstSets[l][index] as set, iteration}
           <td
             on:mouseenter={onCellEnter(l, index, iteration)}
             on:mouseleave={onCellLeave}
-            class:selected={selectedCell === `${l}_${index}_${iteration}`}
-            class:dependency={dependencyCells.includes(`${l}_${iteration}`)}>
+            class:selected={selectedCell === `${l}#${index}#${iteration}`}
+            class:dependency={dependencyCells.includes(`${l}#${iteration}`)}>
             <Set {set} />
           </td>
         {/each}
         <td class="separator" />
-        {#if confArray[l][index] === true}
-          <td class="conflict">
-            <Set set={lookAheads[l][index]} />
-          </td>
-        {:else}
-          <td>
-            <Set set={lookAheads[l][index]} />
-          </td>
-        {/if}
+        <td class:conflict={confArray[l][index]}>
+          <Set set={lookAheads[l][index]} />
+        </td>
       </tr>
     {/each}
   {/each}
