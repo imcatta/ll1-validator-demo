@@ -4,17 +4,27 @@
   export let index;
   export let warnings;
 
-  let warningMessage;
+  let duplicatedRuleWarningMessage;
+  let unreachableRuleWarningMessage;
 
   $: {
-    const warning = warnings.find(
-      v => v.nonTerminal === l && v.index === index
-    );
-    if (warning) {
-      warningMessage = warning.message;
-    } else {
-      warningMessage = undefined;
-    }
+    duplicatedRuleWarningMessage = undefined;
+    unreachableRuleWarningMessage = undefined;
+
+    warnings
+      .filter(v => v.nonTerminal === l)
+      .forEach(warning => {
+        switch (warning.constructor.name) {
+          case "DuplicatedRuleWarning":
+            if (warning.index === index) {
+              duplicatedRuleWarningMessage = warning.message;
+            }
+            break;
+          case "UnreachableRuleWarning":
+            unreachableRuleWarningMessage = warning.message;
+            break;
+        }
+      });
   }
 </script>
 
@@ -24,10 +34,17 @@
   }
 </style>
 
-{#if warningMessage}
+{#if unreachableRuleWarningMessage}
+  <span
+    class="icon has-text-info is-pulled-right has-tooltip-right"
+    data-tooltip={unreachableRuleWarningMessage}>
+    <i class="fas fa-info-circle fa-lg" />
+  </span>
+{/if}
+{#if duplicatedRuleWarningMessage}
   <span
     class="icon has-text-warning is-pulled-right has-tooltip-right"
-    data-tooltip={warningMessage}>
+    data-tooltip={duplicatedRuleWarningMessage}>
     <i class="fas fa-exclamation-triangle fa-lg" />
   </span>
 {/if}
