@@ -119,7 +119,14 @@
   <div class="columns">
     <div class="column is-one-third">
       <div class="box">
-        <textarea rows="15" class="textarea" bind:value={grammarString} />
+        <textarea
+          rows="15"
+          class="textarea"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          bind:value={grammarString} />
         {#if errorMessage}
           <p class="help is-danger mb-2">{errorMessage}</p>
         {/if}
