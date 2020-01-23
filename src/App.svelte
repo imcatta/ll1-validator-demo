@@ -120,8 +120,9 @@
     <div class="column is-one-third">
       <div class="box">
         A web application based on
-        <a target="_blank" href="https://github.com/imcatta/ll1-validator">ll1-validator</a>
-        .
+        <a target="_blank" href="https://github.com/imcatta/ll1-validator">
+          ll1-validator
+        </a>
       </div>
       <div class="box">
         <textarea
