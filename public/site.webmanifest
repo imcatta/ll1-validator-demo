@@ -9,6 +9,7 @@
     "description": "Checks if a given a context-free grammar is a LL(1) grammar.",
     "orientation": "any",
     "background_color": "transparent",
+    "start_url": "/",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
