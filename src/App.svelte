@@ -136,7 +136,11 @@
         {#if errorMessage}
           <p class="help is-danger mb-2">{errorMessage}</p>
         {/if}
-        <a href="#" target="_blank">Need help?</a>
+        <a
+          href="https://drive.google.com/file/d/1lqKTJiMnvf4HXYfh-OO2cxB2bZgDE8sB/view"
+          target="_blank">
+          Need help?
+        </a>
         <button class="button is-primary is-pulled-right" on:click={calculate}>
           Calculate
         </button>
