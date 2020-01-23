@@ -86,8 +86,8 @@
 </script>
 
 <style>
-  .separator {
-    background-color: #efefef;
+  .white-border {
+    border: white;
   }
   .conflict {
     background-color: #fdc3c3;
@@ -95,16 +95,26 @@
   .selected-rule {
     background-color: #fdf9c3;
   }
+  .align-center {
+    vertical-align: middle;
+    text-align: center;
+  }
 </style>
 
 <table class="table is-bordered">
   <tr>
-    <th>Rule</th>
+    <th colspan={iterations.length + 1} class="has-text-centered">
+      First Sets
+    </th>
+    <td rowspan="2" class="white-border" />
+    <th rowspan="2" class="align-center">Look Aheads</th>
+  </tr>
+  <tr>
+    <td class="has-text-weight-medium has-text-grey-dark">Rule</td>
     {#each iterations as iteration}
       <th>{iteration}</th>
     {/each}
-    <th class="separator" />
-    <th>Look Aheads</th>
+
   </tr>
   {#each Object.keys(grammar) as l}
     {#each grammar[l] as rule, index}
@@ -128,7 +138,7 @@
             <Set {set} />
           </td>
         {/each}
-        <td class="separator" />
+        <td class="white-border" />
         <td class:conflict={confArray[l][index]}>
           <Set set={lookAheads[l][index]} />
         </td>

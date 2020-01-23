@@ -119,6 +119,11 @@
   <div class="columns">
     <div class="column is-one-third">
       <div class="box">
+        A web application based on
+        <a target="_blank" href="https://github.com/imcatta/ll1-validator">ll1-validator</a>
+        .
+      </div>
+      <div class="box">
         <textarea
           rows="15"
           class="textarea"
@@ -130,7 +135,8 @@
         {#if errorMessage}
           <p class="help is-danger mb-2">{errorMessage}</p>
         {/if}
-        <button class="button is-primary" on:click={calculate}>
+        <a href="#" target="_blank">Need help?</a>
+        <button class="button is-primary is-pulled-right" on:click={calculate}>
           Calculate
         </button>
       </div>

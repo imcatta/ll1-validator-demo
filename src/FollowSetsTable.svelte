@@ -36,9 +36,12 @@
 
 <table class="table is-bordered">
   <tr>
-    <th>Nonterminal</th>
+    <th colspan="100%" class="has-text-centered">Follow Sets</th>
+  </tr>
+  <tr>
+    <td class="has-text-weight-medium has-text-grey-dark">Nonterminal</td>
     {#each iterations as iteration}
-      <th>{iteration}</th>
+      <td class="has-text-weight-medium has-text-grey-dark">{iteration}</td>
     {/each}
   </tr>
   {#each Object.keys(followSets) as l}
